@@ -15,9 +15,15 @@ RUN chmod a+x /alpine_build_scripts/*.sh       \
 CMD ["aws"]
 ENTRYPOINT ["aws"]
 
-# built with the following additional labels:
-#   opsgang.build_git_uri
-#   opsgang.build_git_ref
-#   opsgang.build_git_sha
-#   opsgang.built_by
-#   opsgang.awscli_version
+# built with additional labels:
+# VER=$(grep -Po '(?<=version=")[^"]+' Dockerfile)
+# NAME=$(grep -Po '(?<=name=")[^"]+' Dockerfile)
+#  . ./labels.sh
+#  docker build \
+#   --no-cache=true --force-rm \
+#   --label opsgang.awscli_version=$(awscli_version) \
+#   --label opsgang.build_git_uri=$(git_uri)
+#   --label opsgang.build_git_ref=$(git_ref)
+#   --label opsgang.build_git_sha=$(git_sha)
+#   --label opsgang.built_by=$(built_by)
+#   -t $NAME:$VER .
