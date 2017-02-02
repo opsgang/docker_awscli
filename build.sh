@@ -73,7 +73,7 @@ docker_build(){
     n=$(img_name) || return 1
     v=$(img_version) || return 1
 
-    echo docker build --no-cache=true --force-rm $labels -t $n:$v .
+    docker build --no-cache=true --force-rm $labels -t $n:$v .
 }
 
 git_tag(){
@@ -81,3 +81,5 @@ git_tag(){
     git tag -a $img_version -m "${TAG_INFO}" \
     && git push --tags
 }
+
+docker_build

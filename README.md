@@ -6,5 +6,4 @@
     git clone https://github.com/opsgang/docker_awscli.git
     cd docker_awscli
     git clone https://github.com/opsgang/alpine_build_scripts
-    . ./build.sh
-    docker_build # adds custom labels to image
+    ./build.sh # adds custom labels to image
