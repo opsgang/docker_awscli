@@ -11,7 +11,7 @@ COPY alpine_build_scripts /alpine_build_scripts
 RUN chmod a+x /alpine_build_scripts/*.sh       \
     && /alpine_build_scripts/install_awscli.sh \
     && rm -rf /var/cache/apk/* /alpine_build_scripts 2>/dev/null
-  
+
 CMD ["aws"]
 ENTRYPOINT ["aws"]
 

@@ -5,6 +5,19 @@
 
 GIT_SHA_LEN=8
 
+version_gt() {
+    [[ "$(printf '%s\n' "$@" | sort -V | head -n 1)" != "$1" ]]
+}
+
+valid_docker_version() {
+    v=$(docker --version | grep -Po '\b\d+\.\d+\.\d+\b')
+    if version_gt 1.12.0 $v
+    then
+        echo "ERROR: need min docker version 1.12.0" >&2
+        return 1
+    fi
+}
+
 awscli_version() {
     PYPI_AWSCLI="https://pypi.python.org/pypi/awscli/json"
     curl -s --retry 5                \
@@ -69,6 +82,9 @@ EOM
 }
 
 docker_build(){
+
+    valid_docker_version || return 1
+
     labels=$(labels) || return 1
     n=$(img_name) || return 1
     v=$(img_version) || return 1
