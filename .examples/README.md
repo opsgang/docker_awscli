@@ -40,18 +40,23 @@ You must set $DOCKER\_OPTS first if you want to:
 
 ### EXAMPLE: USING AWS\_ ENV VARS
 
-        # ... pass the AWS_ vars I've got set in my current shell
-        export DOCKER_OPTS="
-            --env AWS_SECRET_ACCESS_KEY
-            --env AWS_ACCESS_KEY_ID
-            --env AWS_DEFAULT_REGION=eu-west-2
-        "
-        aws ec2 describe-images # will use the vars from your current env
+```bash
+# ... pass the AWS_ vars I've got set in my current shell
+export DOCKER_OPTS="
+    --env AWS_SECRET_ACCESS_KEY
+    --env AWS_ACCESS_KEY_ID
+    --env AWS_DEFAULT_REGION=eu-west-2
+"
+aws ec2 describe-images # will use the vars from your current env
+```
 
 ### EXAMPLE: WRITING TO THE HOST FILESYSTEM
 
 
-        # mount relevant local filesystem as docker volume, and make docker work there
-        export DOCKER_OPTS="-v $PWD:/project -w /project" # set workdir to writeable mount
+```bash
+# mount relevant local filesystem as docker volume, and make docker work there
+export DOCKER_OPTS="-v $PWD:/project -w /project" # set workdir to writeable mount
 
-        aws s3 cp s3://bucket.example.com/some/file .
+aws s3 cp s3://bucket.example.com/some/file .
+```
+
