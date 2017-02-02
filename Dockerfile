@@ -4,7 +4,7 @@ LABEL \
       name="opsgang/awscli" \
       vendor="sortuniq"     \
       version="1.0.0"       \
-      description="... alias docker-run to 'aws' and run as if aws cli" \
+      description="... alias docker-run to 'aws' and run as if aws cli"
 
 COPY alpine_build_scripts /alpine_build_scripts
 
