@@ -9,3 +9,7 @@ cd docker_awscli
 git clone https://github.com/opsgang/alpine_build_scripts
 ./build.sh # adds custom labels to image
 ```
+
+## examples
+
+See `aws` cmd example under .examples dir
