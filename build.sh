@@ -72,12 +72,12 @@ img_name(){
 
 labels() {
     cat<<EOM
-    --label "opsgang.awscli_version=$(awscli_version)"
-    --label "opsgang.build_git_uri=$(git_uri)"
-    --label "opsgang.build_git_sha=$(git_sha)"
-    --label "opsgang.build_git_branch=$(git_branch)"
-    --label "opsgang.build_git_tag=$(img_version)"
-    --label "opsgang.built_by=$(built_by)"
+    --label opsgang.awscli_version=$(awscli_version)
+    --label opsgang.build_git_uri=$(git_uri)
+    --label opsgang.build_git_sha=$(git_sha)
+    --label opsgang.build_git_branch=$(git_branch)
+    --label opsgang.build_git_tag=$(img_version)
+    --label opsgang.built_by=$(built_by)
 EOM
 }
 
