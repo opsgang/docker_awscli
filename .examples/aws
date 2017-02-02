@@ -1,0 +1,28 @@
+#!/bin/bash
+# vim: et sr sw=4 ts=4 smartindent syntax=sh:
+# aws - replacement for awscli binary, using docker awscli:stable
+#
+# =================================================
+# Put this in your file in your PATH, and chmod a+x
+# =================================================
+#
+# See .examples/README.md for more details.
+
+container_as_cmd() {
+    local cmd_args="$@"
+    required_vars "CONTAINER_NAME TAGGED_IMG" || return 1
+    sudo docker kill $CONTAINER_NAME >/dev/null 2>&1
+    sudo docker rm -f $CONTAINER_NAME >/dev/null 2>&1
+
+    docker run --name $CONTAINER_NAME --rm $DOCKER_OPTS $TAGGED_IMG $cmd_args
+}
+
+# unique_id(): ... used to minimise race-conditions when you run cmd more than once
+#              in the same second.
+unique_id() {
+    echo $(( $(shuf -i 000001-999999 -n1) * $(shuf -i 000001-999999 -n1) ))
+}
+
+export CONTAINER_NAME="${CONTAINER_NAME:-awscli_$(date +'%Y%m%d%H%M%S')_$(unique_id)}"
+export TAGGED_IMG=awscli:stable
+container_as_cmd "$@"

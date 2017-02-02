@@ -1,5 +1,5 @@
 #!/bin/bash
-#
+# vim: et sr sw=4 ts=4 smartindent:
 # helper script to generate label data for docker image during building
 #
 
@@ -36,6 +36,13 @@ git_sha(){
     git rev-parse --short=${GIT_SHA_LEN} --verify HEAD
 }
 
+git_branch(){
+    r=$(git rev-parse --abbrev-ref HEAD)
+    [[ -z "$r" ]] && echo "ERROR: no rev to parse when finding branch? " >&2 && return 1
+    [[ "$r" == "HEAD" ]] && r="from-a-tag"
+    echo "$r"
+}
+
 img_version(){
     (
         set -o pipefail;
@@ -55,8 +62,8 @@ labels() {
     --label opsgang.awscli_version="$(awscli_version)"
     --label opsgang.build_git_uri="$(git_uri)"
     --label opsgang.build_git_sha="$(git_sha)"
-    --label opsgang.build_git_branch="$(git_sha)"
-    --label opsgang.build_git_ref="$(img_version)"
+    --label opsgang.build_git_branch="$(git_branch)"
+    --label opsgang.build_git_tag="$(img_version)"
     --label opsgang.built_by="$(built_by)"
 EOM
 }
