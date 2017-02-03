@@ -5,6 +5,9 @@ branches:
   only:
     - evaluate_shippable
 
+env:
+  - secure: B1a5vCcEpoQtxXNKZI4qRce7lTjwzr1GerNkXSrp75GXmMCP4jPsxcAP8dabbkopgzeUxCn2VGWZlzUwduPTuq/t3yBqpYwp5kA7PxkxD/mqGlEOyNYoH+QfX9uyjHkphfG7BiYc06jnNUimW5ayw7DlRxhJVjUE6QRxNR0O3+duvDrrvjyexNYM+cFgCEqscMFrBpDaReFhwvFW7PfDJRla+Lm0RxQS2hEfXZeyPTLKCyjoOaTrHoWLsWLIzYbZqU4rnGUFG+2p8zIBK2OIn4U4EJSsRjJNhjkYbp4Y/cGLJu2GSM93yRY2NxPi2EeK/uR4UqZG9uYci4GrIcIsKg==
+
 build:
   
   ci:
@@ -12,4 +15,7 @@ build:
     - docker pull opsgang/awscli:stable
     - git clone https://github.com/opsgang/alpine_build_scripts --depth 1
     - ./build.sh
-    - docker images
+    - git describe >.v
+
+  on_success:
+    - docker push opsgang/awscli:$(cat .v)_$(date +'%Y%m%d%H%m%s')
