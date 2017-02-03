@@ -3,6 +3,7 @@
 # helper script to generate label data for docker image during building
 #
 
+sleep 5
 GIT_SHA_LEN=8
 
 version_gt() {
