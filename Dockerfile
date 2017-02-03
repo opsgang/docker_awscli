@@ -3,7 +3,7 @@ MAINTAINER jinal--shah <jnshah@gmail.com>
 LABEL \
       name="opsgang/awscli" \
       vendor="sortuniq"     \
-      version="1.0.0"       \
+      version="1.0.1"       \
       description="... alias docker-run to 'aws' and run as if aws cli"
 
 COPY alpine_build_scripts /alpine_build_scripts
