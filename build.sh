@@ -83,7 +83,7 @@ EOM
 
 docker_build(){
 
-    valid_docker_version || return 1
+#    valid_docker_version || return 1
 
     labels=$(labels) || return 1
     n=$(img_name) || return 1
