@@ -1,0 +1,13 @@
+# vim: et sr sw=2 ts=2 smartindent:
+language: none
+
+branches:
+  only:
+    - evaluate_shippable
+
+build:
+  
+  ci:
+    - docker pull opsgang/awscli:stable
+    - git clone git@github.com:opsgang/alpine_build_scripts --depth 1
+    - ./build.sh
