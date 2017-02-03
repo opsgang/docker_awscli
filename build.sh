@@ -11,9 +11,9 @@ version_gt() {
 
 valid_docker_version() {
     v=$(docker --version | grep -Po '\b\d+\.\d+\.\d+\b')
-    if version_gt 1.12.0 $v
+    if version_gt 1.11.0 $v
     then
-        echo "ERROR: need min docker version 1.12.0" >&2
+        echo "ERROR: need min docker version 1.11.0" >&2
         return 1
     fi
 }
@@ -83,7 +83,7 @@ EOM
 
 docker_build(){
 
-#    valid_docker_version || return 1
+    valid_docker_version || return 1
 
     labels=$(labels) || return 1
     n=$(img_name) || return 1

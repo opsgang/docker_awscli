@@ -11,10 +11,11 @@ build:
     - docker --version
     - docker pull opsgang/awscli:stable
     - git clone https://github.com/opsgang/alpine_build_scripts --depth 1
-    - echo "$(git describe)_$(date +'%Y%m%d%H%m%s')" >.v
-    - docker tag opsgang/awscli:$(git describe) opsgang/awscli:$(cat .v)
     - ./build.sh
+    - echo $(grep -Po '(?<=[vV]ersion=")[^"]+' Dockerfile | head -n 1)>.ov
+    - echo $(cat .ov)_$(date +'%Y%m%d%H%m%s')>.nv
+    - docker tag opsgang/awscli:$(cat .ov) opsgang/awscli:$(cat .nv)
 
   on_success:
-    - echo "version tag is $(cat .v)" 
-    - docker push opsgang/awscli:$(cat .v)
+    - echo "version tag is " $(cat .nv)
+    - docker push opsgang/awscli:$(cat .nv)
