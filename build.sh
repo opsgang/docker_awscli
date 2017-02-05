@@ -2,9 +2,13 @@
 # vim: et sr sw=4 ts=4 smartindent:
 # helper script to generate label data for docker image during building
 #
+# docker_build will generate an image tagged :candidate
+#
+# It is a post-step to tag that appropriately and push to repo
 
-sleep 5
+MIN_DOCKER=1.11.0
 GIT_SHA_LEN=8
+IMG_TAG=candidate
 
 version_gt() {
     [[ "$(printf '%s\n' "$@" | sort -V | head -n 1)" != "$1" ]]
@@ -12,18 +16,26 @@ version_gt() {
 
 valid_docker_version() {
     v=$(docker --version | grep -Po '\b\d+\.\d+\.\d+\b')
-    if version_gt 1.11.0 $v
+    if version_gt $MIN_DOCKER $v
     then
-        echo "ERROR: need min docker version 1.11.0" >&2
+        echo "ERROR: need min docker version $MIN_DOCKER" >&2
         return 1
     fi
 }
 
 awscli_version() {
-    PYPI_AWSCLI="https://pypi.python.org/pypi/awscli/json"
+    _pypi_pkg_version 'awscli'
+}
+
+credstash_version() {
+    _pypi_pkg_version 'credstash'
+}
+
+_pypi_pkg_version() {
+    local pkg="$1"
+    local uri="https://pypi.python.org/pypi/$pkg/json"
     curl -s --retry 5                \
-        --retry-max-time 20          \
-            $PYPI_AWSCLI             \
+        --retry-max-time 20 $uri     \
     | jq -r '.releases | keys | .[]' \
         2>/dev/null                  \
     | sort --version-sort            \
@@ -57,13 +69,6 @@ git_branch(){
     echo "$r"
 }
 
-img_version(){
-    (
-        set -o pipefail;
-        grep -Po '(?<=[vV]ersion=")[^"]+' Dockerfile | head -n 1
-    )
-}
-
 img_name(){
     (
         set -o pipefail;
@@ -72,31 +77,33 @@ img_name(){
 }
 
 labels() {
+    av=$(awscli_version) || return 1
+    gu=$(git_uri) || return 1
+    gs=$(git_sha) || return 1
+    gb=$(git_branch) || return 1
+    gt=$(git describe || echo "untagged")
+    bb=$(built_by) || return 1
+
     cat<<EOM
-    --label opsgang.awscli_version=$(awscli_version)
-    --label opsgang.build_git_uri=$(git_uri)
-    --label opsgang.build_git_sha=$(git_sha)
-    --label opsgang.build_git_branch=$(git_branch)
-    --label opsgang.build_git_tag=$(img_version)
-    --label opsgang.built_by=$(built_by)
+    --label version=${av}_$(date +'%Y%m%d%H%M%S')
+    --label opsgang.awscli_version=$av
+    --label opsgang.build_git_uri=$gu
+    --label opsgang.build_git_sha=$gs
+    --label opsgang.build_git_branch=$gb
+    --label opsgang.build_git_tag=$gt
+    --label opsgang.built_by=$bb
 EOM
 }
 
+# will create an image tagged 'candidate'
 docker_build(){
 
     valid_docker_version || return 1
 
     labels=$(labels) || return 1
     n=$(img_name) || return 1
-    v=$(img_version) || return 1
 
-    docker build --no-cache=true --force-rm $labels -t $n:$v .
-}
-
-git_tag(){
-    [[ -z "$TAG_INFO" ]] && echo "ERROR: define \$TAG_INFO" >&2 && return 1
-    git tag -a $img_version -m "${TAG_INFO}" \
-    && git push --tags
+    docker build --no-cache=true --force-rm $labels -t $n:$IMG_TAG .
 }
 
 docker_build

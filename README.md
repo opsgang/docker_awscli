@@ -16,7 +16,7 @@ git clone https://github.com/opsgang/alpine_build_scripts
 
 ```bash
 # ... replace /in/my/PATH below with somewhere in your $PATH
-docker pull awscli:stable # or use x.y.z version as required.
+docker pull opsgang/awscli:stable # or use x.y.z version as required.
 wget https://github.com/opsgang/docker_awscli/raw/master/.examples/aws -O /in/my/PATH/aws
 chmod a+x /in/my/PATH/aws
 ```
