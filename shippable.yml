@@ -16,8 +16,8 @@ build:
       && sudo mv jq-linux64 /usr/bin/jq
     - docker pull opsgang/awscli:stable || true # speed up build layers
     - git clone https://github.com/opsgang/alpine_build_scripts --depth 1
-      && ls -1a # workaround to avoid locking issues with uncleaned minion
-    - shippable_retry bash ./build.sh # avoid aufs file-locking with new shell
+      && sync # workaround to avoid locking issues with uncleaned minion
+    - bash ./build.sh # avoid aufs file-locking with new shell
 
   on_success:
     - a=$(docker inspect opsgang/awscli:candidate | jq -r '.[].Config.Labels')
