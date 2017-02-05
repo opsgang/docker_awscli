@@ -14,7 +14,6 @@ build:
     - curl -O -L https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
       && chmod +x jq-linux64
       && sudo mv jq-linux64 /usr/bin/jq
-      && ls -l /usr/bin/jq
     - docker pull opsgang/awscli:stable # speed up build layers
     - git clone https://github.com/opsgang/alpine_build_scripts --depth 1
       && ls -1a # workaround to avoid locking issues with uncleaned minion
@@ -23,11 +22,11 @@ build:
   on_success:
     - a=$(docker inspect opsgang/awscli:candidate | jq -r '.[].Config.Labels')
     - echo $a | jq . # show me the labels please
-    - v=$(echo $a | jq -r '.[].Config.Labels.version')
-    - av=$(echo $a | jq -r '.[].Config.Labels."opsgang.awscli_version"')
+    - v=$(echo $a | jq -r '.version')
+    - av=$(echo $a | jq -r '."opsgang.awscli_version"')
+    - echo "version tag is " $v
     - docker tag opsgang/awscli:candidate opsgang/awscli:$v
     - docker tag opsgang/awscli:candidate opsgang/awscli:$av
-    - echo "version tag is " $v
     - docker login -p $DHP -u $DHU
     - docker push opsgang/awscli:$v
     - docker push opsgang/awscli:$av
