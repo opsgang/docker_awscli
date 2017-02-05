@@ -27,6 +27,8 @@ build:
     - echo "version tag is " $v
     - docker tag opsgang/awscli:candidate opsgang/awscli:$v
     - docker tag opsgang/awscli:candidate opsgang/awscli:$av
+    - docker tag opsgang/awscli:candidate opsgang/awscli:stable
     - docker login -p $DHP -u $DHU
     - docker push opsgang/awscli:$v
     - docker push opsgang/awscli:$av
+    - docker push opsgang/awscli:stable
