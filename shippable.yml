@@ -16,12 +16,13 @@ build:
     - docker pull opsgang/awscli:stable # speed up build layers
     - git clone https://github.com/opsgang/alpine_build_scripts --depth 1
     - bash ./build.sh # avoid aufs file-locking issues by running new shell
+
+  on_success:
+    - sudo apt-get update && sudo apt-get -y install jq
     - docker inspect opsgang/awscli:candidate | jq -r '.[].Config.Labels.version' >.v
     - docker inspect opsgang/awscli:candidate | jq -r '.[].Config.Labels.awscli_version' >.av
     - docker tag opsgang/awscli:candidate opsgang/awscli:$(cat .v)
     - docker tag opsgang/awscli:candidate opsgang/awscli:$(cat .av)
-
-  on_success:
     - echo "version tag is " $(cat .v)
     - docker login -p $DHP -u $DHU
     - docker push opsgang/awscli:$(cat .v)
