@@ -5,6 +5,8 @@ _use this container to emulate the aws cli binary to run aws commands_
 
 ## building
 
+**built by shippable.com**
+
 ```bash
 git clone https://github.com/opsgang/docker_awscli.git
 cd docker_awscli

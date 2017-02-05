@@ -1,2 +1,5 @@
 build.sh
 .examples
+**/*.pem
+**/*.tmpl
+**/*.swp
