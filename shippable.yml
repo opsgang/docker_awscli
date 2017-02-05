@@ -11,7 +11,7 @@ env:
 reset_minion: true
 
 build:
-  
+
   ci:
     - docker pull opsgang/awscli:stable # speed up build layers
     - git clone https://github.com/opsgang/alpine_build_scripts --depth 1
