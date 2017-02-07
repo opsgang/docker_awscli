@@ -1,3 +1,4 @@
+# vim: et sr sw=4 ts=4 smartindent syntax=dockerfile:
 FROM gliderlabs/alpine:3.4
 MAINTAINER jinal--shah <jnshah@gmail.com>
 LABEL \
@@ -17,8 +18,6 @@ ENTRYPOINT ["aws"]
 #
 # version
 # opsgang.awscli_version
-# opsgang.credstash_version
-# opsgang.jq_version
 #
 # opsgang.build_git_uri
 # opsgang.build_git_sha
