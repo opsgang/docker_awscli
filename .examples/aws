@@ -1,12 +1,35 @@
 #!/bin/bash
 # vim: et sr sw=4 ts=4 smartindent syntax=sh:
-# aws - replacement for awscli binary, using docker awscli:stable
+# aws - replacement for awscli binary, using docker opsgang/awscli:stable
 #
 # =================================================
 # Put this in your file in your PATH, and chmod a+x
 # =================================================
 #
 # See .examples/README.md for more details.
+#
+_check_var_defined() {
+    local var_name="$1"
+    local var_val="${!var_name}"
+    if [[ -z $var_val ]]; then
+        return 1
+    fi
+}
+
+required_vars() {
+    local rc=0
+    local required_vars="$1"
+    local this_var
+    for this_var in $required_vars; do
+        if ! _check_var_defined $this_var
+        then
+            echo "ERROR $0: \$$this_var must be set in env" >&2
+            rc=1
+        fi
+    done
+
+    return $rc
+}
 
 container_as_cmd() {
     local cmd_args="$@"
@@ -24,5 +47,5 @@ unique_id() {
 }
 
 export CONTAINER_NAME="${CONTAINER_NAME:-awscli_$(date +'%Y%m%d%H%M%S')_$(unique_id)}"
-export TAGGED_IMG=awscli:stable
+export TAGGED_IMG=opsgang/awscli:stable
 container_as_cmd "$@"
